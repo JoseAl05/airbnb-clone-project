@@ -17,10 +17,12 @@ import Modal from './Modal';
 import ModalHeader from './ModalHeader';
 import Input from '../inputs/Input';
 import Button from '../Button';
+import useLoginModal from '@/app/hooks/useLoginModal';
 
 
 const RegisterModal = () => {
     const registerModal = useRegisterModal();
+    const loginModal = useLoginModal();
     const [isLoading, setIsLoading] = useState(false);
 
     const {
@@ -53,6 +55,11 @@ const RegisterModal = () => {
             })
     }
 
+    const toggleLogin = useCallback(() => {
+        registerModal.onClose();
+        loginModal.onOpen();
+    }, [loginModal, registerModal])
+
     const bodyContent = (
         <div className='flex flex-col gap-4'>
             <ModalHeader title='Welcome to Airbnb' subtitle='Create your account' />
@@ -82,7 +89,7 @@ const RegisterModal = () => {
                     <p>
                         Already have an account?
                     </p>
-                    <div className='text-neutral-800 cursor-pointer hover:underline' onClick={registerModal.onClose}>
+                    <div className='text-neutral-800 cursor-pointer hover:underline' onClick={toggleLogin}>
                         Login
                     </div>
                 </div>
