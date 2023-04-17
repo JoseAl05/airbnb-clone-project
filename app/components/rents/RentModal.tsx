@@ -8,6 +8,7 @@ import Modal from '../Modal';
 import ModalHeader from '../authModals/ModalHeader';
 import { categories } from '../categories/Categories';
 import CategoryInput from '../categories/CategoryInput';
+import CountrySelect from '../inputs/CountrySelect';
 
 enum STEPS {
     category = 0,
@@ -103,12 +104,24 @@ const RentModal = () => {
         </>
     )
 
+    if (step === STEPS.location) {
+        bodyContent = (
+            <div className='flex flex-col gap-8'>
+                <ModalHeader
+                    title='Where is your place located?'
+                    subtitle='Help guests find you!'
+                />
+                <CountrySelect />
+            </div>
+        )
+    }
+
     return (
         <Modal
             title='Aribnb your home!'
             isOpen={rentModal.isOpen}
             onClose={rentModal.onClose}
-            onSubmit={rentModal.onClose}
+            onSubmit={onNext}
             actionLabel={actionLabel}
             secondaryActionLabel={secondaryActionLabel}
             secondaryAction={step === STEPS.category ? undefined : onBack}
