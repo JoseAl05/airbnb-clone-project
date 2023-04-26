@@ -21,6 +21,20 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
     return (
         <div >
             <Select
+                className={{
+                    control: () => 'p-3 border-2',
+                    input:() => 'text-lg',
+                    option: () => 'text-lg'
+                }}
+                theme={(theme) => ({
+                    ...theme,
+                    borderRadius:6,
+                    colors:{
+                        ...theme.colors,
+                        primary:'black',
+                        primary25:'#ffe4e6'
+                    }
+                })}
                 placeholder='Anywhere'
                 isClearable
                 options={getAll()}
@@ -31,7 +45,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
                         <div>{option.flag}</div>
                         <div>
                             {option.label},
-                            <span className='text-neutral-800 ml-1'>{option.region}</span>
+                            <span className='text-neutral-500 ml-1'>{option.region}</span>
                         </div>
                     </div>
                 )}
