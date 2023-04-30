@@ -2,8 +2,11 @@
 
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { TbPhotoPlus } from 'react-icons/tb';
+
+
+
 
 declare global {
     var cloudinary: any;
@@ -15,23 +18,25 @@ interface ImageUploadProps {
 }
 
 
-const ImageUpload:React.FC<ImageUploadProps> = ({onChange,value}) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
 
-    const handleUpload = useCallback((result:any) => {
+
+
+    const handleUpload = useCallback((result: any) => {
         onChange(result.info.secure_url);
-    },[onChange])
+    }, [onChange])
 
     return (
         <CldUploadWidget
             onUpload={handleUpload}
             uploadPreset='xemrwzzb'
             options={{
-                maxFiles:1
+                maxFiles: 1
             }}
         >
-            {({open}) => {
-                return(
-                    <div 
+            {({ open }) => {
+                return (
+                    <div
                         onClick={() => open?.()}
                         className='
                             relative
@@ -50,7 +55,7 @@ const ImageUpload:React.FC<ImageUploadProps> = ({onChange,value}) => {
                             hover:opacity-70
                         '
                     >
-                        <TbPhotoPlus size={50}/>
+                        <TbPhotoPlus size={50} />
                         <p className='font-semibold text-lg'>
                             Click to Upload
                         </p>
@@ -59,11 +64,12 @@ const ImageUpload:React.FC<ImageUploadProps> = ({onChange,value}) => {
                                 <Image
                                     alt='Upload'
                                     fill
-                                    style={{objectFit:'cover'}}
+                                    style={{ objectFit: 'cover' }}
                                     src={value}
                                 />
                             </div>
-                        )}
+                        )
+                        }
                     </div>
                 )
             }}
