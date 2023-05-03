@@ -40,14 +40,21 @@ const useFavorite = ({ listingId, currentUser }: IUseFavorite) => {
 
         await request();
 
-        if((await request()).config.method === 'post'){
-          toast.success('Added to favorites!');
-        }else{
-          toast.success('Removed from favorites!');
+        if ((await request()).config.method === 'post') {
+          toast.promise(request(), {
+            loading: 'Loading',
+            success: 'Added to Favorites!',
+            error: 'Something went wrong. Pleas try again.',
+          });
+        } else {
+          toast.promise(request(), {
+            loading: 'Loading',
+            success: 'Removed from Favorites',
+            error: 'Something went wrong. Pleas try again.',
+          });
         }
 
         router.refresh();
-
       } catch (error) {
         toast.error('Something went wrong. Please try again.');
       }
