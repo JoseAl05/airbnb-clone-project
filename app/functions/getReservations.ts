@@ -16,10 +16,12 @@ export default async function getReservations(params: IParams) {
       query.listingId = listingId;
     }
 
+    //Reservations made by the current user
     if (userId) {
       query.userId = userId;
     }
 
+    //Reservations that other users have made in the current user's property
     if (authorId) {
       query.listing = { userId: authorId };
     }
