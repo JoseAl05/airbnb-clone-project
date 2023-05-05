@@ -43,17 +43,24 @@ const RegisterModal = () => {
         setIsLoading(true);
 
         //Axios POST call to register end point
-        axios.post('/api/signup', data)
-            .then(() => {
-                registerModal.onClose();
-                loginModal.onOpen();
-            })
-            .catch((err) => {
-                toast.error('Something went wrong.')
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
+        const signup = axios.post('/api/signup', data);
+
+        toast.promise(signup,{
+            success:'Register Complete!',
+            loading:'Please wait for the system to register.',
+            error:'Something went wrong'
+        })
+        .then(() => {
+            registerModal.onClose();
+            loginModal.onOpen();
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .finally(() => {
+            setIsLoading(false);
+        })
+
     }
 
     const toggleLogin = useCallback(() => {
