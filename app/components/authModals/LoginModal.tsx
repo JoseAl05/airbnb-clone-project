@@ -44,22 +44,28 @@ const LoginModal = () => {
         setIsLoading(true);
 
         //Axios POST call to signin end point
-        signIn('credentials', {
+        const logIn = signIn('credentials', {
             ...data,
             redirect: false
         })
-            .then(callback => {
-                setIsLoading(false);
+        toast.promise(logIn, {
+            success: 'Logged In!',
+            loading: 'Logging in. Please wait.'
+        })
+        .then(callback => {
+            setIsLoading(false);
 
-                if (callback?.ok) {
-                    toast.success('Logged In!');
-                    router.refresh();
-                    loginModal.onClose();
-                }
-                if (callback?.error) {
-                    toast.error(callback.error);
-                }
-            })
+            if (callback?.ok) {
+                router.refresh();
+                loginModal.onClose();
+            }
+            if (callback?.error) {
+                toast.error(callback.error);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     const toggleRegister = useCallback(() => {
