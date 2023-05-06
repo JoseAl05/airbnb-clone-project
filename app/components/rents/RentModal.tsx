@@ -95,16 +95,21 @@ const RentModal = () => {
         }
         setIsLoading(true);
 
-        axios.post('/api/listing',data)
+        const listing = axios.post('/api/listing',data);
+
+        toast.promise(listing,{
+            success:'Listing Created!',
+            error:'Something went wrong. Please try again.',
+            loading:'Creating listing... Please wait.'
+        })
         .then(() => {
-            toast.success('Listing Created!');
             router.refresh();
             reset();
             setStep(STEPS.category);
             rentModal.onClose();
         })
-        .catch(() => {
-            toast.error('Something went wrong. Please try again.')
+        .catch((error) => {
+            console.log(error);
         })
         .finally(() =>{
             setIsLoading(false);
