@@ -1,5 +1,7 @@
 'use client';
 
+import { IconType } from 'react-icons';
+
 
 interface ListingCategoryProps {
     icon: IconType,
