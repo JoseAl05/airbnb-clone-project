@@ -48,7 +48,9 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({ icon: Icon, label, selected }
     }, [label, params, router])
 
     return (
-        <div onClick={handleClick} className={`
+        <div
+            onClick={handleClick}
+            className={`
             flex
             flex-col
             items-center
