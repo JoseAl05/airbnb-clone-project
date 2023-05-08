@@ -10,12 +10,13 @@ import CountrySelect, { CountrySelectValue } from '../inputs/CountrySelect';
 import qs from 'query-string';
 import { formatISO } from 'date-fns';
 import ModalHeader from '../authModals/ModalHeader';
-import Calendar from '../inputs/Calendar';
 import Counter from '../inputs/Counter';
+import CategoryInput from '../categories/CategoryInput';
+import {categories} from '../categories/Categories';
 
 enum STEPS {
-    location = 0,
-    date = 1,
+    category = 0,
+    location = 1,
     info = 2
 }
 
@@ -26,74 +27,63 @@ const SearchModal = () => {
     const params = useSearchParams();
     const searchModal = useSearchModal();
 
-    const [step,setStep] = useState(STEPS.location);
-    const [location,setLocation] = useState<CountrySelectValue>()
-    const [guestCount,setGuestCount] = useState(1);
-    const [roomCount,setRoomCount] = useState(1);
-    const [bathroomCount,setBathroomCount] = useState(1);
-    const [dateRange,setDateRange] = useState<Range>({
-        startDate:new Date(),
-        endDate:new Date(),
-        key:'selection'
-    })
+    const [step, setStep] = useState(STEPS.category);
+    const [categorySelected, setCategorySelected] = useState();
+    const [location, setLocation] = useState<CountrySelectValue>()
+    const [guestCount, setGuestCount] = useState(1);
+    const [roomCount, setRoomCount] = useState(1);
+    const [bathroomCount, setBathroomCount] = useState(1);
 
-    const Map = useMemo(() => dynamic(()=>import('../map/Map'),{
-        ssr:false
-    }),[location]);
+    const Map = useMemo(() => dynamic(() => import('../map/Map'), {
+        ssr: false
+    }), [location]);
 
     const onBack = useCallback(() => {
         setStep((value) => value - 1);
-    },[]);
+    }, []);
 
     const onNext = useCallback(() => {
         setStep((value) => value + 1);
-    },[]);
+    }, []);
 
-    const onSubmit = useCallback(async() => {
-        if(step !== STEPS.info){
+    const onSubmit = useCallback(async () => {
+        if (step !== STEPS.info) {
             return onNext();
         }
 
         let currentQuery = {};
 
-        if(params){
+        if (params) {
             currentQuery = qs.parse(params.toString());
         }
 
-        const updatedQuery:any = {
+        const updatedQuery: any = {
             ...currentQuery,
-            locationValue : location?.value,
+            locationValue: location?.value,
             guestCount,
             roomCount,
-            bathroomCount
+            bathroomCount,
+            category:categorySelected
         };
 
-        if(dateRange.startDate){
-            updatedQuery.startDate = formatISO(dateRange.startDate);
-        }
-
-        if(dateRange.endDate) {
-            updatedQuery.endDate = formatISO(dateRange.endDate);
-        }
 
         const url = qs.stringifyUrl({
-            url:'/',
-            query:updatedQuery
-        },{skipNull:true})
+            url: '/',
+            query: updatedQuery
+        }, { skipNull: true })
 
-        setStep(STEPS.location);
+        setStep(STEPS.category);
 
         searchModal.onClose();
 
         router.push(url);
 
-    },[
+    }, [
         bathroomCount,
         guestCount,
         roomCount,
         location?.value,
-        dateRange.startDate,
-        dateRange.endDate,
+        categorySelected,
         onNext,
         params,
         router,
@@ -102,52 +92,59 @@ const SearchModal = () => {
     ]);
 
     const actionLabel = useMemo(() => {
-        if(step === STEPS.info){
+        if (step === STEPS.info) {
             return 'Search';
         }
 
         return 'Next';
-    },[step]);
+    }, [step]);
 
     const secondaryActionLabel = useMemo(() => {
-        if(step === STEPS.location){
+        if (step === STEPS.category) {
             return undefined;
         }
 
         return 'Back';
-    },[step]);
+    }, [step]);
 
     let bodyContent = (
         <div className='flex flex-col gap-8'>
-            <ModalHeader
-                title='Where do you want to go?'
-                subtitle='Find the perfect location!'
-            />
-            <CountrySelect
-                value={location}
-                onChange={(value) => setLocation(value as CountrySelectValue)}
-            />
-            <hr/>
-            <Map center={location?.latlng} />
+            <ModalHeader title='Which of these best describes your place?' subtitle='Pick a category' />
+            <div className='grid grid-cols-1 gap-3 max-h-[50vh] overflow-y-auto md:grid-cols-2'>
+                {categories.map(category => {
+                    return (
+                        <div key={category.label} className='col-span-1'>
+                            <CategoryInput
+                                onClick={(value) => setCategorySelected(value)}
+                                selected={categorySelected === category.label}
+                                label={category.label}
+                                icon={category.icon}
+                            />
+                        </div>
+                    )
+                })}
+            </div>
         </div>
-    );
+    )
 
-    if(step === STEPS.date){
+    if (step === STEPS.location) {
         bodyContent = (
             <div className='flex flex-col gap-8'>
                 <ModalHeader
-                    title='When do you plan to go?'
-                    subtitle='Make sure everyone is free!'
+                    title='Where do you want to go?'
+                    subtitle='Find the perfect location!'
                 />
-                <Calendar
-                    value={dateRange}
-                    onChange={(value) => setDateRange(value.selection)}
+                <CountrySelect
+                    value={location}
+                    onChange={(value) => setLocation(value as CountrySelectValue)}
                 />
+                <hr />
+                <Map center={location?.latlng} />
             </div>
         );
     }
 
-    if(step === STEPS.info) {
+    if (step === STEPS.info) {
         bodyContent = (
             <div className='flex flex-col gap-8'>
                 <ModalHeader
@@ -160,14 +157,14 @@ const SearchModal = () => {
                     value={guestCount}
                     onChange={(value) => setGuestCount(value)}
                 />
-                <hr/>
+                <hr />
                 <Counter
                     title='Rooms'
                     subtitle='How many rooms do you need?'
                     value={roomCount}
                     onChange={(value) => setRoomCount(value)}
                 />
-                <hr/>
+                <hr />
                 <Counter
                     title='Bathrooms'
                     subtitle='How many bathrooms do you need?'
@@ -186,7 +183,7 @@ const SearchModal = () => {
             title='Filters'
             actionLabel={actionLabel}
             secondaryActionLabel={secondaryActionLabel}
-            secondaryAction={step === STEPS.location ? undefined : onBack}
+            secondaryAction={step === STEPS.category ? undefined : onBack}
             body={bodyContent}
         />
     );
