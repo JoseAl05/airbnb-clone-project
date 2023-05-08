@@ -115,7 +115,7 @@ const SearchModal = () => {
                     return (
                         <div key={category.label} className='col-span-1'>
                             <CategoryInput
-                                onClick={(value) => setCategorySelected(value)}
+                                onClick={(value:any) => setCategorySelected(value)}
                                 selected={categorySelected === category.label}
                                 label={category.label}
                                 icon={category.icon}
