@@ -21,11 +21,11 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
     return (
         <div >
             <Select
-                className={{
+                classNames={{
                     control: () => 'p-3 border-2',
-                    input:() => 'text-lg',
+                    input: () => 'text-lg',
                     option: () => 'text-lg'
-                }}
+                  }}
                 theme={(theme) => ({
                     ...theme,
                     borderRadius:6,
