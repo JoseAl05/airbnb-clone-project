@@ -5,8 +5,6 @@ export interface IListingParams {
   guestCount?: number;
   roomCount?: number;
   bathroomCount?: number;
-  startDate?: string;
-  endDate?: string;
   locationValue?: string;
   category?: string;
 }
@@ -18,8 +16,6 @@ export default async function getListings(params: IListingParams) {
       guestCount,
       roomCount,
       bathroomCount,
-      startDate,
-      endDate,
       locationValue,
       category,
     } = params;
@@ -46,24 +42,6 @@ export default async function getListings(params: IListingParams) {
         gte: +bathroomCount,
       };
     }
-    if (startDate && endDate) {
-      query.NOT = {
-        reservations: {
-          some: {
-            OR: [
-              {
-                endDate: { gte: startDate },
-                startDate: { lte: startDate }
-              },
-              {
-                startDate: { lte: endDate },
-                endDate: { gte: endDate }
-              }
-            ]
-          }
-        }
-      };
-    }
     if (locationValue) {
       query.locationValue = {
           contains:locationValue,
@@ -73,7 +51,6 @@ export default async function getListings(params: IListingParams) {
       query.category = category;
     }
     //**END QUERY FILTERS**//
-    console.log(query);
     const listings = await prisma.listing.findMany({
       where:query,
       orderBy: {
