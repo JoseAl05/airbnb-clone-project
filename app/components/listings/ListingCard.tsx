@@ -4,7 +4,7 @@ import useCountries from '@/app/hooks/useCountries';
 import { SafeListing, SafeReservation, SafeUser } from '@/app/types';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
-import { format, formate } from 'date-fns';
+import { format } from 'date-fns';
 import Image from 'next/image';
 import HeartButton from '../buttons/HeartButton';
 import Button from '../buttons/Button';
