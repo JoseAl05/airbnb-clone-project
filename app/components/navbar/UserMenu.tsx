@@ -9,6 +9,7 @@ import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import useRentModal from '@/app/hooks/useRentModal';
 import { useRouter } from 'next/navigation';
+import { SafeUser } from '@/app/types';
 
 
 interface UserMenuProps {
