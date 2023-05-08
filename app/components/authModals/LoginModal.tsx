@@ -50,7 +50,8 @@ const LoginModal = () => {
         })
         toast.promise(logIn, {
             success: 'Logged In!',
-            loading: 'Logging in. Please wait.'
+            loading: 'Logging in. Please wait.',
+            error:'Something went wrong. Please try again'
         })
         .then(callback => {
             setIsLoading(false);

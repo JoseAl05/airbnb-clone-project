@@ -48,7 +48,7 @@ const RegisterModal = () => {
         toast.promise(signup,{
             success:'Register Complete!',
             loading:'Please wait for the system to register.',
-            error:'Something went wrong'
+            error:'Something went wrong. Please try again'
         })
         .then(() => {
             registerModal.onClose();
