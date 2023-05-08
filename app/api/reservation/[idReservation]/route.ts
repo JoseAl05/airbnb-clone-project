@@ -4,7 +4,7 @@ import getCurrentUser from '@/app/functions/getCurrentUser';
 import prisma from '@/app/libs/prismadb';
 
 interface IParams {
-  reservationId?: string;
+  idReservation?: string;
 }
 
 export async function DELETE(
