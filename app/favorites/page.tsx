@@ -25,6 +25,7 @@ const FavoritesPage = async() => {
         <ClientOnly>
             <FavoritesClient
                 favoritesListings={favoritesListings}
+                // @ts-ignore
                 currentUser={currentUser}
             />
         </ClientOnly>
