@@ -22,7 +22,7 @@ interface ListingInfoProps {
         icon: IconType;
         label: string;
         description: string;
-    };
+    } | undefined;
 }
 
 const ListingInfo: React.FC<ListingInfoProps> = ({ user, description, roomCount, guestCount, bathroomCount, locationValue, category }) => {
