@@ -14,62 +14,56 @@ const Search = () => {
     const { getByValue } = useCountries();
 
     const locationValue = params?.get('locationValue');
-    const startDate = params?.get('startDate');
-    const endDate = params?.get('endDate');
+    const category = params?.get('category');
     const guestCount = params?.get('guestCount');
 
     const locationLabel = useMemo(() => {
-        if(locationValue){
+        if (locationValue) {
             return getByValue(locationValue as string)?.label;
         }
 
         return 'Anywhere'
-    },[getByValue,locationValue]);
+    }, [getByValue, locationValue]);
 
-    const dateLabel = useMemo(() => {
-        if(startDate && endDate){
-            const start = new Date(startDate as string);
-            const end = new Date (endDate as string);
-
-            let diff =  differenceInDays(end,start);
-
-            if(diff === 0){
-                diff = 1;
-            }
-
-            return `${diff} Days`;
+    const categoryLabel = useMemo(() => {
+        if (category) {
+            return category
         }
 
-        return 'Any week';
-    },[startDate,endDate]);
+        return 'Any Type';
+    }, [category]);
 
     const guestLabel = useMemo(() => {
-        if(guestCount){
+        if (guestCount) {
             return `${guestCount} Guests`;
         }
 
         return 'Add Guests';
-    },[guestCount]);
+    }, [guestCount]);
 
     return (
-        <div onClick={searchModal.onOpen} className='w-full py-2 border-[1px] transition rounded-full shadow-sm cursor-pointer md:w-auto hover:shadow-md'>
-            <div className='flex flex-row items-center justify-between'>
-                <div className='px-6 text-sm font-semibold'>
-                    {locationLabel}
-                </div>
-                <div className='flex-1 hidden px-6 text-sm font-semibold text-center border-x-[1px] sm:block'>
-                    {dateLabel}
-                </div>
-                <div className='text-sm pl-6 pr-2 text-gray-600 flex flex-row items-center gap-3'>
-                    <div className='hidden sm:block'>
-                        {guestLabel}
+        <>
+        <div className='flex flex-row gap-8 justify-around'>
+            <div onClick={searchModal.onOpen} className='w-full py-2 border-[1px] transition rounded-full shadow-sm cursor-pointer md:w-auto hover:shadow-md'>
+                <div className='flex flex-row items-center justify-between'>
+                    <div className='px-6 text-sm font-semibold'>
+                        {categoryLabel}
                     </div>
-                    <div className='p-2 bg-rose-200 rounded-full text-white'>
-                        <BiSearch size={18} />
+                    <div className='flex-1 hidden px-6 text-sm font-semibold text-center border-x-[1px] sm:block'>
+                        {locationLabel}
+                    </div>
+                    <div className='text-sm pl-6 pr-2 text-gray-600 flex flex-row items-center gap-3'>
+                        <div className='hidden sm:block'>
+                            {guestLabel}
+                        </div>
+                        <div className='p-2 bg-rose-200 rounded-full text-white'>
+                            <BiSearch size={18} />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
